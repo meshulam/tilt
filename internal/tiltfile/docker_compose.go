@@ -137,7 +137,7 @@ func (s *tiltfileState) dcResource(thread *starlark.Thread, fn *starlark.Builtin
 	svc.TriggerMode = triggerMode
 	svc.Links = links.Links
 
-	svc.Labels = labels.Values // (lizz): do labels need to be passed to the service?
+	svc.Labels = labels.Values
 
 	if imageRefAsStr != nil {
 		normalized, err := container.ParseNamed(*imageRefAsStr)
@@ -192,7 +192,7 @@ type dcService struct {
 	TriggerMode triggerMode
 	Links       []model.Link
 
-	Labels       []string
+	Labels []string
 
 	resourceDeps []string
 }
@@ -306,6 +306,7 @@ func (s *tiltfileState) dcServiceToManifest(service *dcService, dcSet dcResource
 		Name:                 model.ManifestName(service.Name),
 		TriggerMode:          um,
 		ResourceDependencies: mds,
+		Labels:               service.Labels,
 	}.WithDeployTarget(dcInfo)
 
 	if service.DfPath == "" {
