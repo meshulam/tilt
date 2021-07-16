@@ -62,7 +62,7 @@ type k8sResource struct {
 
 	links []model.Link
 
-	labels []string
+	labels map[string]string
 }
 
 // holds options passed to `k8s_resource` until assembly happens
@@ -79,7 +79,7 @@ type k8sResourceOptions struct {
 	manuallyGrouped   bool
 	podReadinessMode  model.PodReadinessMode
 	links             []model.Link
-	labels            []string
+	labels            map[string]string
 }
 
 func (r *k8sResource) addEntities(entities []k8s.K8sEntity,
@@ -266,7 +266,7 @@ func (s *tiltfileState) k8sResource(thread *starlark.Thread, fn *starlark.Builti
 	var objectsVal starlark.Sequence
 	var podReadinessMode tiltfile_k8s.PodReadinessMode
 	var links links.LinkList
-	var labels value.LabelOrLabelList
+	var labels value.LabelSet
 	autoInit := true
 
 	if err := s.unpackArgs(fn.Name(), args, kwargs,
